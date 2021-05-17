@@ -1,5 +1,6 @@
 const ADD_ITEM = "ADD_ITEM";
 const DELETE_ITEM = "DELETE_ITEM";
+const EDIT_ITEM = "EDIT_ITEM";
 const initialState = {
   list: [],
 };
@@ -27,6 +28,10 @@ const add_del_reducers = (state = initialState, action) => {
       );
       return {
         list: filterArr,
+      };
+    case EDIT_ITEM:
+      return {
+        list: state.list,
       };
     default:
       return state;
