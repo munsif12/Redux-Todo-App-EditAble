@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { add_item, delete_item, edit_item } from "./redux/actions/actions";
+import {
+  add_item,
+  delete_item,
+  edit_item,
+  updated,
+} from "./redux/actions/actions";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
 function App() {
@@ -9,6 +14,7 @@ function App() {
   const dispatch = useDispatch();
   const [listItem, setListItem] = useState("");
   const [editorNot, seteditorNot] = useState(false);
+  const inputFocus = useRef("");
 
   // adding data to localStorage
   useEffect(() => {
@@ -24,18 +30,29 @@ function App() {
           id="text"
           value={listItem}
           onChange={(e) => setListItem(e.target.value)}
+          ref={inputFocus}
         />
         {!editorNot ? (
           <button
             onClick={() => {
               dispatch(add_item(listItem));
               setListItem(" ");
+              inputFocus.current.focus();
             }}
           >
             +
           </button>
         ) : (
-          <button onClick={() => seteditorNot(false)}>edit</button>
+          <button
+            onClick={() => {
+              seteditorNot(false);
+              dispatch(updated(listItem));
+              setListItem(" ");
+              inputFocus.current.focus();
+            }}
+          >
+            edit
+          </button>
         )}
       </div>
       <div className="allLists">
@@ -58,8 +75,9 @@ function App() {
                       }}
                       onClick={() => {
                         dispatch(edit_item(val.id));
-                        setListItem(val.data);
+                        setListItem(val.data, listItem);
                         seteditorNot(true);
+                        inputFocus.current.focus();
                       }}
                     />
                     <DeleteForeverIcon
