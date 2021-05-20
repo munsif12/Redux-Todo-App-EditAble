@@ -25,15 +25,14 @@ const edit_item = (id) => {
   return {
     type: EDIT_ITEM,
     payload: {
-      id,
+      id, //is id ke zaarurat updated action ko pary ge bad ma
     },
   };
 };
-const updated = (id, updatedVal) => {
+const updated = (updatedVal) => {
   return {
     type: UPDATED,
     payload: {
-      id,
       data: updatedVal,
     },
   };
